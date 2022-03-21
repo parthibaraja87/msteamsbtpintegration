@@ -1,0 +1,52 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.9/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.9",
+  "id": "29a58c70-a681-11ec-b2a5-cff9053cbfb9",
+  "version": "0.0.1",
+  "packageName": "msteamsapproval",
+  "developer": {
+    "name": "parthibaraja",
+    "websiteUrl": "https://msteamsapproval.cfapps.eu10.hana.ondemand.com",
+    "privacyUrl": "https://msteamsapproval.cfapps.eu10.hana.ondemand.com/privacy.html",
+    "termsOfUseUrl": "https://msteamsapproval.cfapps.eu10.hana.ondemand.com/tou.html"
+  },
+  "name": {
+    "short": "Deductions Approval",
+    "full": "Deductions Approval"
+  },
+  "description": {
+    "short": "TODO: add short description here",
+    "full": "TODO: add full description here"
+  },
+  "icons": {
+    "outline": "icon-outline.png",
+    "color": "icon-color.png"
+  },
+  "accentColor": "#D85028",
+  "configurableTabs": [
+    {
+      "configurationUrl": "https://msteamsapproval.cfapps.eu10.hana.ondemand.com/btpApprovalTab/config.html?name={loginHint}&tenant={tid}&group={groupId}&theme={theme}",
+      "canUpdateConfiguration": true,
+      "scopes": [
+        "team"
+      ]
+    }
+  ],
+  "staticTabs": [],
+  "bots": [],
+  "connectors": [],
+  "composeExtensions": [],
+  "permissions": [
+    "identity",
+    "messageTeamMembers"
+  ],
+  "validDomains": [
+    "msteamsapproval.cfapps.eu10.hana.ondemand.com"
+  ],
+  "showLoadingIndicator": false,
+  "isFullScreen": false,
+  "webApplicationInfo": {
+    "id": "6f3195a5-85bf-40b7-b9d6-9c6ef755f0e9",
+    "resource": "api://msteamsapproval.cfapps.eu10.hana.ondemand.com/6f3195a5-85bf-40b7-b9d6-9c6ef755f0e9"
+  }
+}

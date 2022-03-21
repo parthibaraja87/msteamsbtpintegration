@@ -1,0 +1,6 @@
+applications:
+- name: msteamsapproval
+  path: dist/web/
+  instances: 1
+  buildpack: staticfile_buildpack
+  memory: 256M

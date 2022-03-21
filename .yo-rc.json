@@ -1,0 +1,12 @@
+{
+  "generator-teams": {
+    "promptValues": {
+      "developer": "parthibaraja",
+      "unitTestsEnabled": false,
+      "lintingSupport": false,
+      "useAzureAppInsights": false
+    },
+    "libraryName": "msteamsapproval",
+    "generator-version": "3.5.0"
+  }
+}

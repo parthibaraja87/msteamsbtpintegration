@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>BTP Approval: Configuration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- inject:css -->
+  <!-- endinject -->
+  
+</head>
+<script type="text/javascript">
+    microsoftTeams.initialize();
+    microsoftTeams.settings.registerOnSaveHandler(function (saveEvent) {
+        microsoftTeams.settings.setSettings({
+            entityId: "example",
+            contentUrl: "https://msteamsapproval.cfapps.eu10.hana.ondemand.com/tab.html",
+            suggestedDisplayName: "example",
+            websiteUrl: "https://msteamsapproval.cfapps.eu10.hana.ondemand.com",
+            removeUrl: "https://msteamsapproval.cfapps.eu10.hana.ondemand.com/remove.html"
+        });
+        saveEvent.notifySuccess();
+    });
+
+    function onClick() 
+    {
+        microsoftTeams.settings.setValidityState(true);
+    }
+</script>
+<body>
+    <div id='app'>
+        Loading...
+      </div>
+      <!-- inject:js -->
+      <!-- endinject -->
+      <script type='text/javascript'>
+        msteamsapproval.render(msteamsapproval.BtpApprovalTabConfig, document.getElementById('app'), {});
+      </script>
+
+</body>
+
+</html>
