@@ -68,8 +68,8 @@ export const BtpApprovalTab = () => {
     const onApprove = async () =>{
         const tabapiuri = process.env.TAB_APP_URI;
         alert(tabapiuri);
-        const authClient = process.env.clientId;
-        alert(authClient);
+        const authurl= process.env.AUTH_URL;
+        alert(authurl);
         let TaskId = getTaskId();
         alert(TaskId);
         let userID = context?.userPrincipalName;
