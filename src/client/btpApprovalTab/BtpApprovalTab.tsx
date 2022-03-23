@@ -5,6 +5,9 @@ import { useState, useEffect } from "react";
 import { useTeams } from "msteams-react-base-component";
 import * as microsoftTeams from "@microsoft/teams-js";
 import jwtDecode from "jwt-decode";
+import axios from "axios";
+import * as qs from "qs";
+
 
 /**
  * Implementation of the BTP Approval content page
@@ -15,6 +18,7 @@ export const BtpApprovalTab = () => {
     const [entityId, setEntityId] = useState<string | undefined>();
     const [name, setName] = useState<string>();
     const [error, setError] = useState<string>();
+    const [text, setText] = useState<string>();
 
     useEffect(() => {
         if (inTeams === true) {
@@ -44,6 +48,105 @@ export const BtpApprovalTab = () => {
         }
     }, [context]);
 
+    const handleTextChange = (e) => {
+        setText(e.target.value);
+    };
+    
+    const getTaskId = () =>{
+        const search = window.location.search;
+        const params = new URLSearchParams(search);
+        const taskID = params.has('taskID') ? params.get('taskID') : "";
+        return taskID;
+    };
+
+    const getId = () => {
+        let urlParams = new URLSearchParams(document.location.search.substring(1));
+        let taskID = urlParams.get('taskID');
+        return taskID;
+    };
+
+    const onApprove = async () =>{
+        const tabapiuri = process.env.TAB_APP_URI;
+        alert(tabapiuri);
+        const authClient = process.env.clientId;
+        alert(authClient);
+        let TaskId = getTaskId();
+        alert(TaskId);
+        let userID = context?.userPrincipalName;
+        alert(userID);
+        let sComments = text;
+        alert(`Comment: ${sComments}`);
+        let result = await updateWorkflow();
+        alert(result);
+
+    };
+
+    const onReject = () =>{
+        alert("Reject Button Clicked!");
+        let TaskId = getTaskId();
+        alert(TaskId);
+    };
+
+     const getAccessToken = async ()=> {
+        try {
+            let sAuthurl = process.env.AUTH_URL,
+             aAuthClientID = process.env.AUTH_CLIENT_ID,
+             aAuthSecret = process.env.AUTH_CLIENT_SECRET,
+             payload = qs.stringify({
+                "grant_type": "client_credentials",
+                "client_id": aAuthClientID,
+                "client_secret": aAuthSecret,
+                "response_type": "token"
+            });
+
+            let accessToken = await axios({
+                method: 'POST',
+                url: sAuthurl,
+                headers: {
+                    'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+                },
+                data: payload
+            });
+            let sAccessToken = `Bearer ${accessToken.data.access_token}`;
+            return sAccessToken;
+        }
+        catch (err) {
+            return err;
+        }
+    };
+
+  const updateWorkflow = async () => {
+        try {
+            let staskID = "988f03db-a5d1-11ec-a973-eeee0a87f719" || null,
+             accessToken = await getAccessToken(),
+             sWfRestUrl = process.env.WF_REST_URL + staskID;
+    
+            let updateWorkflowData = {
+                "context":
+                {
+                    "comment": "Comment from BAS - Node.js",
+                    "processor": "Parthibaraja.Vijayan"
+                },
+                "status": "COMPLETED",
+                "decision": "Approved"
+            }
+            let responseUpdateWorkflow = await axios({
+                method: 'PATCH',
+                url:  sWfRestUrl,
+                headers: {
+                    "content-type": "application/json",
+                    "Authorization": accessToken
+                },
+                data: updateWorkflowData
+            });
+            return responseUpdateWorkflow;
+        }
+        catch (err) {
+            return err;
+        }
+    
+    };
+
     /**
      * The render() method to create the UI of the tab
      */
@@ -58,11 +161,11 @@ export const BtpApprovalTab = () => {
                             <h3>Comments</h3>
                         </div>
                         <div>
-                            <textarea id="comments-id" rows={10} cols={60} />
+                            <textarea id="comments-id" rows={10} cols={60} onChange={handleTextChange}/>
                         </div>
                         <div>
-                            <Button color={"#ff5c5c"} onClick={() => alert("Approve Button Clicked!")}>Approve</Button>
-                            <Button onClick={() => alert("Reject Button Clicked!")}>Reject</Button>
+                            <Button onClick={onApprove}>Approve</Button>
+                            <Button onClick={onReject}>Reject</Button>
                         </div>
                     </div>
                 </Flex.Item>

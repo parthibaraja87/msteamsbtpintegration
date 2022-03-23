@@ -6,16 +6,21 @@
     "start": "node dist/server.js",
     "build": "gulp build",
     "manifest": "gulp manifest",
-    "debug": "gulp serve --debug"
+    "debug": "gulp serve --debug",
+    "build-client": "cd client && npm install && npm run build",
+    "push": "cf push -f ./manifest.yml --vars-file ./vars.yml",
+    "build-push": "npm run build-client && npm run push"
   },
   "dependencies": {
-    "@fluentui/react-northstar": "~0.58.0",
     "@fluentui/react": "^8.61.2",
+    "@fluentui/react-northstar": "~0.58.0",
     "@microsoft/teams-js": "~1.11.0",
+    "@sap/xsenv": "^3.2.1",
     "axios": "^0.21.1",
     "botbuilder": "4.14.1",
     "botbuilder-dialogs": "4.14.1",
     "compression": "1.7.4",
+    "cors": "^2.8.5",
     "debug": "4.3.2",
     "dotenv": "10.0.0",
     "express": "4.16.4",
@@ -24,6 +29,8 @@
     "jwt-decode": "^3.1.2",
     "morgan": "1.9.1",
     "msteams-react-base-component": "^3.1.1",
+    "qs": "^6.10.3",
+    "query-string": "^7.1.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-native": "^0.67.4"

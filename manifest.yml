@@ -4,3 +4,11 @@ applications:
   instances: 1
   buildpack: staticfile_buildpack
   memory: 256M
+  services:
+      - workflow
+      - msteamsapproval-xsuaa
+  env:
+    AUTH_URL: ((AUTH_URL))
+    WF_REST_URL: ((WF_REST_URL))
+    AUTH_CLIENT_ID: ((AUTH_CLIENT_ID))
+    AUTH_CLIENT_SECRET: ((AUTH_CLIENT_SECRET))
