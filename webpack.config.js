@@ -4,7 +4,7 @@
 
 const webpack = require("webpack");
 const nodeExternals = require("webpack-node-externals");
-
+const Dotenv = require("dotenv-webpack");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const path = require("path");
@@ -91,7 +91,10 @@ const config = [{
         }]
     },
     plugins: [
-        new webpack.EnvironmentPlugin({ PUBLIC_HOSTNAME: undefined, TAB_APP_ID: null, TAB_APP_URI: null }),
+        //new webpack.EnvironmentPlugin({ PUBLIC_HOSTNAME: undefined, TAB_APP_ID: null, TAB_APP_URI: null }),
+        new Dotenv({
+            systemvars: true
+        }),
         new ForkTsCheckerWebpackPlugin({
             typescript: {
                 configFile: "./src/client/tsconfig.json"
