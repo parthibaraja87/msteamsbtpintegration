@@ -52,132 +52,59 @@ export const BtpApprovalTab = () => {
         setText(e.target.value);
     };
 
-    const getTaskId = () => {
-        const search = window.location.search;
-        const params = new URLSearchParams(search);
-        const taskID = params.has('taskID') ? params.get('taskID') : "";
-        return taskID;
-    };
-
-    const getId = () => {
-        let urlParams = new URLSearchParams(document.location.search.substring(1));
-        let taskID = urlParams.get('taskID');
-        return taskID;
-    };
 
     const onApprove = async () => {
-        const tabapiuri = process.env.TAB_APP_URI;
-        alert(tabapiuri);
-        const authurl = process.env.AUTH_URL;
-        alert(authurl);
-        let TaskId = getTaskId();
-        alert(TaskId);
-        let userID = context?.userPrincipalName;
-        alert(userID);
-        let sComments = text;
-        alert(`Comment: ${sComments}`);
-        let result = await updateWorkflow1();
+        const userID = context?.userPrincipalName;
+        alert(`userID: ${userID}`);
+        const comments = text;
+        alert(`Comment: ${comments}`);
+        const taskID =context?.subEntityId;
+        alert(`taskID: ${taskID}`);
+        const data = {
+
+        };
+        const updateWorkFlowData = {
+            "context":
+            {
+                "comment": comments,
+                "processor": userID
+            },
+            "status": "COMPLETED",
+            "decision": "Approved"
+        }
+        let result = await updateWorkflow(updateWorkFlowData, taskID);
         alert(result);
 
     };
 
     const onReject = () => {
         alert("Reject Button Clicked!");
-        let TaskId = getTaskId();
-        alert(TaskId);
     };
 
-    const getAccessToken = async () => {
+    const updateWorkflow = async (updateWorkFlowData, taskID) => {
         try {
-            let sAuthurl = process.env.AUTH_URL,
-                aAuthClientID = process.env.AUTH_CLIENT_ID,
-                aAuthSecret = process.env.AUTH_CLIENT_SECRET,
-                payload = qs.stringify({
-                    "grant_type": "client_credentials",
-                    "client_id": aAuthClientID,
-                    "client_secret": aAuthSecret,
-                    "response_type": "token"
-                });
-
-            let accessToken = await axios({
-                method: 'POST',
-                url: sAuthurl,
+            const payload = {
+                taskID: taskID,
+                updateWorkFlowData: updateWorkFlowData
+            };
+            
+            let responseUpdateWorkflow = await axios({
+                method: 'post',
+                url: '/api/updateworkflow',
                 headers: {
-                    'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+                    "content-type": "application/json"
                 },
                 data: payload
-            });
-            let sAccessToken = `Bearer ${accessToken.data.access_token}`;
-            return sAccessToken;
-        }
-        catch (err) {
-            return err;
-        }
-    };
-
-    const updateWorkflow = async () => {
-        try {
-            let staskID = "988f03db-a5d1-11ec-a973-eeee0a87f719" || null,
-                accessToken = await getAccessToken(),
-                sWfRestUrl = process.env.WF_REST_URL + staskID;
-
-            let updateWorkflowData = {
-                "context":
-                {
-                    "comment": "Comment from BAS - Node.js",
-                    "processor": "Parthibaraja.Vijayan"
-                },
-                "status": "COMPLETED",
-                "decision": "Approved"
-            }
-            let responseUpdateWorkflow = await axios({
-                method: 'PATCH',
-                url: sWfRestUrl,
-                headers: {
-                    "content-type": "application/json",
-                    "Authorization": accessToken
-                },
-                data: updateWorkflowData
             });
             return responseUpdateWorkflow;
         }
         catch (err) {
+            console.log(err.Error);
             return err;
         }
 
     };
 
-    const updateWorkflow1 = async () => {
-        let accessToken = await getAccessToken();
-
-        var axios = require('axios');
-        var data = JSON.stringify({
-            "context": {
-                "comment": "Comment from pstmn",
-                "processor": "bridget.nigina@accenture.com"
-            },
-            "status": "COMPLETED",
-            "decision": "Approved"
-        });
-
-        var config = {
-            method: 'patch',
-            url: 'https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest/v1/task-instances/6d2da9b9-ab38-11ec-9eab-eeee0a90869f',
-            headers: {
-                'Authorization': accessToken, 
-                'Content-Type': 'application/json'
-            },
-            data: data
-        };
-
-        axios(config)
-            .then(function (response) {
-                console.log(JSON.stringify(response.data));
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    };
 
     /**
      * The render() method to create the UI of the tab

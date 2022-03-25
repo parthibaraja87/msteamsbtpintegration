@@ -9,16 +9,16 @@ class WfClient {
      * This method is to update the workflow
      */
        // Update the approval status of a workflow passed in via the data parameter
-    async updateWorkflow(token, data) {
+    async updateWorkFlow(token, data) {
         const WfRestUrl = this.WfRestUrl + data.taskID ;
-		const payload = data.payload ;
+		const payload = data.updateWorkFlowData ;
 		  try {
             let res = await axios({
                 method: 'PATCH',
                 url: WfRestUrl,
                 headers: {
                     "content-type": "application/json",
-                    "Authorization": accessToken
+                    "Authorization": token
                 },
                 data: payload
             });

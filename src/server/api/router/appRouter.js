@@ -14,12 +14,12 @@ const appRouter = Router();
 
 
 // Route to update a workflow 
-appRouter.post('/updateWorkflow/', async (req, res) => {
+appRouter.post('/updateworkflow/', async (req, res) => {
     try {
         const authClient = new AuthClient();
         const client = new WfClient();
         const token = await authClient.getAccessTokenForWFAccess(req);
-        const result = await client.updateWorkflow(token, req.body.data);
+        const result = await client.updateWorkFlow(token, req.body.data);
         res.json(result);
     }catch(error){
         res.status(500).send(error.message ? error.message : 'Internal server error!');

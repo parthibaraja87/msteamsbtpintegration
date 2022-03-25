@@ -16,7 +16,7 @@ class AuthClient {
     /**
      * This method allows to request an OAuth Bearer token
      */
-    async getAccessTokenForApplication (){
+    async getAccessTokenForWFAccess (){
           try {
             const payload = qs.stringify({
                     "grant_type": "client_credentials",
