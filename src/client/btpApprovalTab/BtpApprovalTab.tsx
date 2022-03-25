@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Provider, Flex, Text} from "@fluentui/react-northstar";
+import { Provider, Flex, Text } from "@fluentui/react-northstar";
 import { PrimaryButton, Button } from "@fluentui/react/lib/Button";
 import { useState, useEffect } from "react";
 import { useTeams } from "msteams-react-base-component";
@@ -51,8 +51,8 @@ export const BtpApprovalTab = () => {
     const handleTextChange = (e) => {
         setText(e.target.value);
     };
-    
-    const getTaskId = () =>{
+
+    const getTaskId = () => {
         const search = window.location.search;
         const params = new URLSearchParams(search);
         const taskID = params.has('taskID') ? params.get('taskID') : "";
@@ -65,10 +65,10 @@ export const BtpApprovalTab = () => {
         return taskID;
     };
 
-    const onApprove = async () =>{
+    const onApprove = async () => {
         const tabapiuri = process.env.TAB_APP_URI;
         alert(tabapiuri);
-        const authurl= process.env.AUTH_URL;
+        const authurl = process.env.AUTH_URL;
         alert(authurl);
         let TaskId = getTaskId();
         alert(TaskId);
@@ -76,34 +76,34 @@ export const BtpApprovalTab = () => {
         alert(userID);
         let sComments = text;
         alert(`Comment: ${sComments}`);
-        let result = await updateWorkflow();
+        let result = await updateWorkflow1();
         alert(result);
 
     };
 
-    const onReject = () =>{
+    const onReject = () => {
         alert("Reject Button Clicked!");
         let TaskId = getTaskId();
         alert(TaskId);
     };
 
-     const getAccessToken = async ()=> {
+    const getAccessToken = async () => {
         try {
             let sAuthurl = process.env.AUTH_URL,
-             aAuthClientID = process.env.AUTH_CLIENT_ID,
-             aAuthSecret = process.env.AUTH_CLIENT_SECRET,
-             payload = qs.stringify({
-                "grant_type": "client_credentials",
-                "client_id": aAuthClientID,
-                "client_secret": aAuthSecret,
-                "response_type": "token"
-            });
+                aAuthClientID = process.env.AUTH_CLIENT_ID,
+                aAuthSecret = process.env.AUTH_CLIENT_SECRET,
+                payload = qs.stringify({
+                    "grant_type": "client_credentials",
+                    "client_id": aAuthClientID,
+                    "client_secret": aAuthSecret,
+                    "response_type": "token"
+                });
 
             let accessToken = await axios({
                 method: 'POST',
                 url: sAuthurl,
                 headers: {
-                    'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+                    'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
                 },
                 data: payload
             });
@@ -115,12 +115,12 @@ export const BtpApprovalTab = () => {
         }
     };
 
-  const updateWorkflow = async () => {
+    const updateWorkflow = async () => {
         try {
             let staskID = "988f03db-a5d1-11ec-a973-eeee0a87f719" || null,
-             accessToken = await getAccessToken(),
-             sWfRestUrl = process.env.WF_REST_URL + staskID;
-    
+                accessToken = await getAccessToken(),
+                sWfRestUrl = process.env.WF_REST_URL + staskID;
+
             let updateWorkflowData = {
                 "context":
                 {
@@ -132,7 +132,7 @@ export const BtpApprovalTab = () => {
             }
             let responseUpdateWorkflow = await axios({
                 method: 'PATCH',
-                url:  sWfRestUrl,
+                url: sWfRestUrl,
                 headers: {
                     "content-type": "application/json",
                     "Authorization": accessToken
@@ -144,7 +144,39 @@ export const BtpApprovalTab = () => {
         catch (err) {
             return err;
         }
-    
+
+    };
+
+    const updateWorkflow1 = async () => {
+        let accessToken = await getAccessToken();
+
+        var axios = require('axios');
+        var data = JSON.stringify({
+            "context": {
+                "comment": "Comment from pstmn",
+                "processor": "bridget.nigina@accenture.com"
+            },
+            "status": "COMPLETED",
+            "decision": "Approved"
+        });
+
+        var config = {
+            method: 'patch',
+            url: 'https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest/v1/task-instances/6d2da9b9-ab38-11ec-9eab-eeee0a90869f',
+            headers: {
+                'Authorization': accessToken, 
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
+
+        axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     };
 
     /**
@@ -161,7 +193,7 @@ export const BtpApprovalTab = () => {
                             <h3>Comments</h3>
                         </div>
                         <div>
-                            <textarea id="comments-id" rows={10} cols={60} onChange={handleTextChange}/>
+                            <textarea id="comments-id" rows={10} cols={60} onChange={handleTextChange} />
                         </div>
                         <div>
                             <Button onClick={onApprove}>Approve</Button>

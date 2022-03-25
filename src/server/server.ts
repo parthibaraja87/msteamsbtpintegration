@@ -5,6 +5,8 @@ import * as morgan from "morgan";
 import { MsTeamsApiRouter, MsTeamsPageRouter } from "express-msteams-host";
 import * as debug from "debug";
 import * as compression from "compression";
+import * as cors from 'cors';
+import appRouter from './api/router/appRouter.js';
 
 // Initialize debug logging module
 const log = debug("msteams");
@@ -66,3 +68,9 @@ express.set("port", port);
 http.createServer(express).listen(port, () => {
     log(`Server running on ${port}`);
 });
+
+express.use(cors());
+
+// api endpoints used by client app (React component e.g. used for task module)
+// only give access to requests containing a valid Azure AD context
+express.use('/api', appRouter);

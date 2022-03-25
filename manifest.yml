@@ -12,3 +12,4 @@ applications:
     WF_REST_URL: ((WF_REST_URL))
     AUTH_CLIENT_ID: ((AUTH_CLIENT_ID))
     AUTH_CLIENT_SECRET: ((AUTH_CLIENT_SECRET))
+    test: ((test))
