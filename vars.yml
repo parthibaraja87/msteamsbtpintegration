@@ -1,5 +1,0 @@
-AUTH_URL: https://acnciotrl-accenture-com.authentication.eu10.hana.ondemand.com/oauth/token
-WF_REST_URL: https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest/v1/task-instances/
-AUTH_CLIENT_ID: sb-clone-5f556afb-ee6b-40e5-a207-85486d2c1647!b120853|workflow!b10150
-AUTH_CLIENT_SECRET: 445e917a-f631-4eda-a131-7f21ff44674c$lHxXhm7fVHoxxFJt4H1SJlLMw-tDmvB0nMcuvqKO7Wg=
-test: testVariable
