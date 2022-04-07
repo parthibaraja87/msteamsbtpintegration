@@ -25,21 +25,8 @@ class WfClient {
             return res;
         }
         catch (err) {
+            console.log(err);
             return err;
-        }
-		
-
-        if (res.status >= 400) {
-            console.error(res.data);
-            throw new Error(res.data); 
-        } else {
-            if (res.data){
-                console.log(res.status)
-                return res.data;
-            }else{
-                console.error("HTTP Response was invalid and cannot be deserialized.");
-                throw new Error("HTTP Response was invalid and cannot be deserialized."); 
-            }
         }
         
     }

@@ -24,7 +24,6 @@ class AuthClient {
                     "client_secret": this.AuthSecret,
                     "response_type": "token"
                 });
-
             let accessToken = await axios({
                 method: 'POST',
                 url: this.Authurl,
@@ -37,6 +36,7 @@ class AuthClient {
             return sAccessToken;
         }
         catch (err) {
+            console.log(err);
             return err;
         }
     }

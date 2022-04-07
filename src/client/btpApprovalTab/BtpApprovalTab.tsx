@@ -54,15 +54,9 @@ export const BtpApprovalTab = () => {
 
 
     const onApprove = async () => {
-        const userID = context?.userPrincipalName;
-        alert(`userID: ${userID}`);
+        const userID = context?.userPrincipalName || "parthibaraja.vijayan@accenture.com";
         const comments = text;
-        alert(`Comment: ${comments}`);
-        const taskID =context?.subEntityId;
-        alert(`taskID: ${taskID}`);
-        const data = {
-
-        };
+        const taskID =context?.subEntityId || "576d6075-ac36-11ec-8934-eeee0a82fd9b";
         const updateWorkFlowData = {
             "context":
             {
