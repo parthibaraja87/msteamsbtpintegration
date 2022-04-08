@@ -61,17 +61,21 @@ express.use("/", Express.static(path.join(__dirname, "web/"), {
     index: "index.html"
 }));
 
-// Set the port
-express.set("port", port);
-
-// Start the webserver
-http.createServer(express).listen(port, () => {
-    log(`Server running on ${port}`);
-});
-
 express.use(cors());
 
 // api endpoints used by client app (React component e.g. used for task module)
 // only give access to requests containing a valid Azure AD context
 express.use('/api', appRouter);
+
+// Set the port
+//express.set("port", port);
+
+// Start the webserver
+/*http.createServer(express).listen(port, () => {
+    log(`Server running on ${port}`);
+});*/
+
+express.listen(port, () => { console.log(`Server listening on http://localhost:${ port }`)});
+
+
 

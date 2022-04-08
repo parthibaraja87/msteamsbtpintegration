@@ -1,8 +1,8 @@
 applications:
 - name: msteamsapproval
-  path: dist/web/
+  path: ./
   instances: 1
-  buildpack: staticfile_buildpack
+  buildpack: nodejs_buildpack
   memory: 256M
   services:
       - workflow
@@ -12,4 +12,3 @@ applications:
     WF_REST_URL: ((WF_REST_URL))
     AUTH_CLIENT_ID: ((AUTH_CLIENT_ID))
     AUTH_CLIENT_SECRET: ((AUTH_CLIENT_SECRET))
-    test: ((test))
