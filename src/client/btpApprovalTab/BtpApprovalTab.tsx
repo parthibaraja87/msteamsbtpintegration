@@ -6,7 +6,7 @@ import { useTeams } from "msteams-react-base-component";
 import * as microsoftTeams from "@microsoft/teams-js";
 import jwtDecode from "jwt-decode";
 import axios from "axios";
-import * as qs from "qs";
+
 
 
 /**
@@ -19,6 +19,9 @@ export const BtpApprovalTab = () => {
     const [name, setName] = useState<string>();
     const [error, setError] = useState<string>();
     const [text, setText] = useState<string>();
+    const [actionExecuted, setActionExecuted] = useState(false);
+    const [message, setMessage] = useState<string>();
+    const [errorMessage, setErrorMessage] = useState<string>('');
 
     useEffect(() => {
         if (inTeams === true) {
@@ -52,11 +55,18 @@ export const BtpApprovalTab = () => {
         setText(e.target.value);
     };
 
-
     const onApprove = async () => {
+        await updateWorkflow("Approved");
+    };
+
+    const onReject = async () => {
+        await updateWorkflow("Rejected");
+    };
+
+    const updateWorkflow = async (decision) => {
         const userID = context?.userPrincipalName || "parthibaraja.vijayan@accenture.com";
         const comments = text;
-        const taskID =context?.subEntityId || "576d6075-ac36-11ec-8934-eeee0a82fd9b";
+        const taskID = context?.subEntityId || "2cee9253-c166-11ec-b0e8-eeee0a9296ab";
         const updateWorkFlowData = {
             "context":
             {
@@ -64,24 +74,15 @@ export const BtpApprovalTab = () => {
                 "processor": userID
             },
             "status": "COMPLETED",
-            "decision": "Approved"
+            "decision": decision
         }
-        let result = await updateWorkflow(updateWorkFlowData, taskID);
-        alert(result);
 
-    };
-
-    const onReject = () => {
-        alert("Reject Button Clicked!");
-    };
-
-    const updateWorkflow = async (updateWorkFlowData, taskID) => {
         try {
             const payload = {
                 taskID: taskID,
                 updateWorkFlowData: updateWorkFlowData
             };
-            
+
             let responseUpdateWorkflow = await axios({
                 method: 'post',
                 url: '/api/updateworkflow',
@@ -90,11 +91,15 @@ export const BtpApprovalTab = () => {
                 },
                 data: payload
             });
-            return responseUpdateWorkflow;
+
+            setMessage("Action successfully triggered!");
+            setErrorMessage(" ");
+            setActionExecuted(true);
         }
-        catch (err) {
-            console.log(err.Error);
-            return err;
+        catch (error) {
+            setMessage("Error triggering the action!");
+            setErrorMessage(error.data);
+            setActionExecuted(true);
         }
 
     };
@@ -104,25 +109,41 @@ export const BtpApprovalTab = () => {
      * The render() method to create the UI of the tab
      */
     return (
-        <Provider theme={theme}>
-            <Flex fill={true} column styles={{
-                padding: ".8rem 0 .8rem .5rem"
-            }}>
-                <Flex.Item>
+
+        <div className="container">
+            {actionExecuted === false ? (
+                <div>
                     <div>
-                        <div>
-                            <h3>Comments</h3>
-                        </div>
-                        <div>
-                            <textarea id="comments-id" rows={10} cols={60} onChange={handleTextChange} />
-                        </div>
-                        <div>
-                            <Button onClick={onApprove}>Approve</Button>
-                            <Button onClick={onReject}>Reject</Button>
+                        <h3>Comments</h3>
+                    </div>
+                    <div>
+                        <textarea id="comments-id" rows={10} cols={60} onChange={handleTextChange} />
+                    </div>
+                    <div>
+                        <Button onClick={onApprove}>Approve</Button>
+                        <Button onClick={onReject}>Reject</Button>
+                    </div>
+                </div>
+            ) : (
+                    <div>
+                        <div className="content-message">
+                            <Flex column gap="gap.small">
+                                <Flex hAlign="center">
+                                    <div>
+                                        <Text size={"large"} weight={"bold"} content={message} />
+                                    </div>
+                                </Flex>
+                                {errorMessage ? (
+                                    <Flex hAlign="center">
+                                        <div>
+                                            <Text align={"center"} size={"small"} content={errorMessage} />
+                                        </div>
+                                    </Flex>
+                                ) : ''}
+                            </Flex>
                         </div>
                     </div>
-                </Flex.Item>
-            </Flex>
-        </Provider>
+                )}
+        </div>
     );
 };
